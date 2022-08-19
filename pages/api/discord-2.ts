@@ -36,7 +36,7 @@ export default async function handler(
 
     const buf = await buffer(req);
     const rawBody = buf.toString('utf8');
-
+    console.log({ rawBody, signature, timestamp });
     if (signature === undefined
       || Array.isArray(signature)
       || timestamp === undefined
