@@ -37,8 +37,6 @@ export default async function handler(
     const buf = await buffer(req);
     const rawBody = buf.toString('utf8');
 
-    console.log({ request: req });
-
     if (signature === undefined
       || Array.isArray(signature)
       || timestamp === undefined
@@ -50,6 +48,7 @@ export default async function handler(
     }
 
     const parsedBody = JSON.parse(rawBody);
+    console.log({ parsedBody });
     if (parsedBody.type === InteractionType.PING) {
       return res.status(200).json({ type: InteractionResponseType.PONG })
     }
