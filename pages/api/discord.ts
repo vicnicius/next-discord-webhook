@@ -12,6 +12,7 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  console.log({ req, DISCORD_PUBLIC_KEY });
   const signature = req.headers["X-Signature-Ed25519"];
   const timestamp = req.headers["X-Signature-Timestamp"];
 
