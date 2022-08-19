@@ -6,7 +6,7 @@ type Data = {
   type: number
 }
 
-const DISCORD_PUBLIC_KEY = '';
+const DISCORD_PUBLIC_KEY = process.env.DISCORD_PUBLIC_KEY;
 
 export default function handler(
   req: NextApiRequest,
@@ -19,6 +19,7 @@ export default function handler(
     || Array.isArray(signature)
     || timestamp === undefined
     || Array.isArray(timestamp)
+    || !DISCORD_PUBLIC_KEY
     || !verifyKey(req.body, signature, timestamp, DISCORD_PUBLIC_KEY)
   ) {
     return res.status(401).end('Invalid request signature');
