@@ -44,7 +44,9 @@ export default async function handler(
       return res.status(401).end('Invalid request signature');
     }
 
-    if (req.body.type === 1) {
+    const parsedBody = JSON.parse(rawBody);
+    console.log({ req, parsedBody });
+    if (req.body?.type === 1) {
       return res.status(200).json({ type: 1 })
     }
   }
