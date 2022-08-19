@@ -37,7 +37,7 @@ export default async function handler(
     const buf = await buffer(req);
     const rawBody = buf.toString('utf8');
 
-    console.log({ rawBody });
+    console.log({ request: JSON.stringify(req, null, '\t') });
 
     if (signature === undefined
       || Array.isArray(signature)
