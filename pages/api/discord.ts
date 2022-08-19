@@ -12,9 +12,8 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  console.log({ req, DISCORD_PUBLIC_KEY });
-  const signature = req.headers["X-Signature-Ed25519"];
-  const timestamp = req.headers["X-Signature-Timestamp"];
+  const signature = req.headers["x-signature-ed25519"];
+  const timestamp = req.headers["x-signature-timestamp"];
 
   if (signature === undefined
     || Array.isArray(signature)
