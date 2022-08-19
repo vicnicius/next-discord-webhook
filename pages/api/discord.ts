@@ -1,10 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type {Readable} from "node:stream";
-import {verifyKey} from "discord-interactions";
+import {InteractionResponseType, InteractionType, verifyKey} from "discord-interactions";
 
 type Data = {
-  type: number
+  type: number,
+  data?: {
+    content: string
+  }
 }
 
 export const config = {
@@ -34,6 +37,8 @@ export default async function handler(
     const buf = await buffer(req);
     const rawBody = buf.toString('utf8');
 
+    console.log({ rawBody });
+
     if (signature === undefined
       || Array.isArray(signature)
       || timestamp === undefined
@@ -45,8 +50,28 @@ export default async function handler(
     }
 
     const parsedBody = JSON.parse(rawBody);
-    if (parsedBody.type === 1) {
-      return res.status(200).json({ type: 1 })
+    if (parsedBody.type === InteractionType.PING) {
+      return res.status(200).json({ type: InteractionResponseType.PONG })
+    }
+
+    /**
+     * Handle slash command requests
+     * See https://discord.com/developers/docs/interactions/application-commands#slash-commands
+     */
+    if (parsedBody.type === InteractionType.APPLICATION_COMMAND) {
+      const { name } = parsedBody.data;
+
+      // "test" guild command
+      if (name === 'test') {
+        // Send a message into the channel where command was triggered from
+        return res.status(200).json({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            // Fetches a random emoji to send from a helper function
+            content: 'hello world.',
+          },
+        });
+      }
     }
   }
 }
